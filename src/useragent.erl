@@ -7,7 +7,8 @@
                   manufacturer :: browser_manufacturer(),
                   engine :: browser_engine(),
                   in=[] :: [binary()],
-                  out=[] :: [binary()]}).
+                  out=[] :: [binary()],
+                  vsn=undefined :: float() }).
 -record(os, {name :: os_name(),
              family :: os_family(),
              type :: os_type(),
@@ -78,8 +79,8 @@ parse(UA, Encoding) ->
 
 parse_browser(UA, Browsers) ->
     case parse(UA, Browsers, #browser.in, #browser.out) of
-        #browser{name=Name,family=Family, type=Type,manufacturer=Man,engine=Eng} ->
-            [{name,Name},{family,Family},{type,Type},{manufacturer,Man},{engine,Eng}];
+        #browser{name=Name,family=Family, type=Type,manufacturer=Man,engine=Eng,vsn=Vsn} ->
+            [{name,Name},{family,Family},{type,Type},{manufacturer,Man},{engine,Eng},{vsn,Vsn}];
         _ ->
             [{name,undefined},{family,undefined},{type,undefined},
              {manufacturer,undefined},{engine,undefined}]
@@ -130,6 +131,7 @@ browsers() ->
     Opera=#browser{name= <<"Opera">>, family=opera, type=web, manufacturer=opera, engine=presto, in=[<<"opera">>]},
     Outlook=#browser{name= <<"Outlook">>, family=outlook, type=email, manufacturer=microsoft, engine=word, in=[<<"msoffice">>]},
     IE=#browser{name= <<"Internet Explorer">>, family=ie, type=web, manufacturer=microsoft, engine=trident, in=[<<"msie">>]},
+    IE11=#browser{name= <<"Internet Explorer">>, family=ie, type=web, manufacturer=microsoft, engine=trident, in=[<<"rv:">>]},
     Chrome=#browser{name= <<"Chrome">>, family=chrome, type=web, manufacturer=google, engine=webkit, in=[<<"chrome">>]},
     Safari=#browser{name= <<"Safari">>, family=safari, type=web, manufacturer=apple, engine=webkit, in=[<<"safari">>]},
     Thundr=#browser{name= <<"Thunderbird">>, family=thunderbird, type=email, manufacturer=mozilla, engine=gecko, in=[<<"thunderbird">>]},
@@ -153,16 +155,19 @@ browsers() ->
      %% IE
      [IE
       ,IE#browser{name= <<"Windows Live Mail">>, type=email, in=[<<"outlook-express/7.0">>]}
-      ,IE#browser{name= <<"IE Mobile 9">>, type=mobile, in=[<<"iemobile/9">>]}
-      ,IE#browser{name= <<"IE Mobile 7">>, type=mobile, in=[<<"iemobile 7">>]}
-      ,IE#browser{name= <<"IE Mobile 6">>, type=mobile, in=[<<"iemobile 6">>]}
-      ,IE#browser{name= <<"Internet Explorer 10">>, in=[<<"msie 10">>]}
-      ,IE#browser{name= <<"Internet Explorer 9">>, in=[<<"msie 9">>]}
-      ,IE#browser{name= <<"Internet Explorer 8">>, in=[<<"msie 8">>]}
-      ,IE#browser{name= <<"Internet Explorer 7">>, in=[<<"msie 7">>]}
-      ,IE#browser{name= <<"Internet Explorer 6">>, in=[<<"msie 6">>]}
-      ,IE#browser{name= <<"Internet Explorer 5.5">>, in=[<<"msie 5.5">>]}
-      ,IE#browser{name= <<"Internet Explorer 5">>, in=[<<"msie 5">>]}
+      ,IE#browser{name= <<"IE Mobile 9">>, type=mobile, in=[<<"iemobile/9">>], vsn=9}
+      ,IE#browser{name= <<"IE Mobile 7">>, type=mobile, in=[<<"iemobile 7">>], vsn=7}
+      ,IE#browser{name= <<"IE Mobile 6">>, type=mobile, in=[<<"iemobile 6">>], vsn=6}
+      ,IE#browser{name= <<"Internet Explorer 10">>, in=[<<"msie 10">>], vsn=10}
+      ,IE#browser{name= <<"Internet Explorer 9">>, in=[<<"msie 9">>], vsn=9}
+      ,IE#browser{name= <<"Internet Explorer 8">>, in=[<<"msie 8">>], vsn=8}
+      ,IE#browser{name= <<"Internet Explorer 7">>, in=[<<"msie 7">>], vsn=7}
+      ,IE#browser{name= <<"Internet Explorer 6">>, in=[<<"msie 6">>], vsn=6}
+      ,IE#browser{name= <<"Internet Explorer 5.5">>, in=[<<"msie 5.5">>], vsn=5.5}
+      ,IE#browser{name= <<"Internet Explorer 5">>, in=[<<"msie 5">>], vsn=5}
+     ],
+     %% IE11
+     [IE11#browser{name= <<"Internet Explorer 11">>, in=[<<"rv:11">>], vsn=11}
      ],
      %% Chrome
      [Chrome
